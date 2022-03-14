@@ -1,7 +1,7 @@
 # Spring Boot RabbitMQ 적용
 
 Spring Boot 프로젝트에 RabbitMQ 를 손쉽게 사용하는 방법을 알아보겠습니다.
-모든 소스는 [Github](Github)에 존재합니다.
+모든 소스는 [GitHub](https://github.com/mdjoo0810/spring-rabbitmq-amqp)에 존재합니다.
 
 ## 사용 스펙
 - Spring boot 2.6.4
@@ -129,6 +129,9 @@ public class Application {
 
 #### binding
 - queue(), exchange() 두개를 연결함
+- with("라우팅 부분")
+  - 라우팅 할 수 있음
+  - '#'은 와일드 카드
 
 여기서 중요한 점은 Spring AMQP를 사용하기 위해서는 Queue, TopicExchange, Binding은 최상위 스프링 빈으로 선언해야합니다. (@Configuration에서 사용)
 
@@ -155,11 +158,20 @@ public class Runner implements CommandLineRunner {
         receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
     }
 }
-
-
-
 ```
+
+`receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);` 해당 코드는 쓰레드가 대기상태로 receiver에 latch가 1 -> 0이 될때까지 기다린다하는 의미 입니다.
+
 ---
 ## 마무리
 
-[링크](https://docs.spring.io/spring-amqp/docs/current/reference/html/)
+간단하게 구현하는 방법을 알아보았습니다.
+다음번 포스트로
+
+- Receiver에서 수신하는 메시지 타입이 String -> Custom Object (json)객체로 수신하기
+- Receiver Service, Producer Service 분리 후 Worker를 통한 로직 설계하기
+
+를 진행해보겠습니다.
+
+자세한 내용은 해당
+[링크](https://docs.spring.io/spring-amqp/docs/current/reference/html/)를 참고해주세요.
